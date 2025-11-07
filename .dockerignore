@@ -1,0 +1,91 @@
+################################################################################
+# RESTFX-DDD PROJECT — .dockerignore
+# ------------------------------------------------------------------------------
+# PURPOSE:
+#   Defines which files are excluded from Docker build context to:
+#   • Reduce image size.
+#   • Speed up build times.
+#   • Prevent accidental leaks of secrets or local configs.
+#
+# GUIDELINES:
+#   1. Exclude all developer or temporary files (logs, coverage, vendor, .env).
+#   2. Include only code and build manifests needed for compiling.
+#   3. Allowlist (`!`) key directories such as cmd/, internal/, pkg/, config/.
+#
+# EFFECT:
+#   A minimal, clean Docker context that ensures reproducible builds across
+#   local and CI environments.
+#
+# MAINTENANCE:
+#   • Keep in sync with .gitignore where applicable.
+#   • Verify each service’s Dockerfile builds successfully after pruning.
+#   • Run `docker build --no-cache .` after modifications to validate context.
+################################################################################
+
+.git
+.gitignore
+.gitattributes
+README.md
+LICENSE
+CHANGELOG*
+CONTRIBUTING*
+*.md
+.env
+.env.*
+config/*.local.yaml
+config/*.override.yaml
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+bin/
+out/
+dist/
+build/
+tmp/
+cache/
+*.log
+*.out
+*.prof
+*.coverprofile
+*.cov
+*.test
+coverage.*
+coverage.html
+sbom.json
+vendor/
+go.work
+go.work.sum
+gen/
+proto/gen/
+sqlc/
+openapi/
+*.pb.go
+*.swagger.json
+*.checkstyle
+*.junit.xml
+*.sarif
+*.lint-report.*
+test-results/
+docker-compose.local.yml
+docker-compose.override.yml
+.terraform/
+*.tfstate
+charts/.helm-cache/
+charts/.helm-repository/
+node_modules/
+dist/
+build/
+
+!cmd/
+!internal/
+!pkg/
+!platform/
+!deploy/
+!config/
+!Makefile
+!go.mod
+!go.sum
+!Dockerfile
+!docker/*.Dockerfile
+!*.go

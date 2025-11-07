@@ -1,32 +1,108 @@
-# If you prefer the allow list template instead of the deny list, see community template:
-# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+################################################################################
+# RESTFX-DDD PROJECT — .gitignore
+# ------------------------------------------------------------------------------
+# PURPOSE:
+#   Defines which files and directories should not be committed to Git.
+#   Maintains repository cleanliness and avoids polluting history with
+#   build artifacts, caches, IDE configs, or temporary files.
 #
-# Binaries for programs and plugins
+# GUIDING PRINCIPLES:
+#   • Everything generated → ignored.
+#   • Everything source or config → kept.
+#   • Mirrors Docker ignore list for consistency.
+#
+# COMMON CATEGORIES:
+#   - Build outputs: binaries, coverage, dist, cache
+#   - Local configs: .env, *.local.yaml
+#   - IDE metadata: .vscode/, .idea/
+#   - Code generation: buf/sqlc/oapi outputs
+#   - CI & Terraform state: .terraform/, *.tfstate
+#
+# MAINTENANCE:
+#   • Update this file whenever a new build artifact folder is introduced.
+#   • Do not ignore /config or /pkg sources unless explicitly local.
+#   • Ensure CI-generated artifacts (coverage.html, reports) are excluded.
+################################################################################
+
+# Binaries & build
+bin/
 *.exe
-*.exe~
 *.dll
 *.so
 *.dylib
-
-# Test binary, built with `go test -c`
 *.test
 
-# Code coverage profiles and other test artifacts
+# Go cache & reports
 *.out
+*.log
+*.tmp
+*.bak
 coverage.*
+*.cov
+*.prof
 *.coverprofile
-profile.cov
+*.pprof
+report.xml
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
+# Build tools
+dist/
+build/
+out/
+release/
+artifacts/
+sbom.json
 
-# Go workspace file
-go.work
-go.work.sum
-
-# env file
+# Env & config
 .env
+.env.*
+*.local.yaml
+config/*.local.yaml
+config/*.override.yaml
 
-# Editor/IDE
-# .idea/
-# .vscode/
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+*.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+docker-compose.local.yml
+*.tar
+*.img
+
+# Codegen
+gen/
+proto/gen/
+sqlc/
+openapi/
+buf.gen.yaml
+*.pb.go
+*.swagger.json
+
+# Helm / Terraform
+charts/.helm-cache/
+charts/.helm-repository/
+charts/release/
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+# CI
+*.checkstyle
+*.junit.xml
+*.lint-report.*
+*.html
+*.sarif
+test-results/
+tmp/
+cache/
+
+# Node / frontend
+node_modules/
+*.lock
+dist/
+build/

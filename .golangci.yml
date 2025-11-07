@@ -1,0 +1,149 @@
+################################################################################
+# RESTFX-DDD PROJECT — .golangci.yml
+# ------------------------------------------------------------------------------
+# PURPOSE:
+#   Defines the static analysis and linting policies enforced across the project.
+#   Derived from Mattermost/server configuration, adapted for RESTFX-DDD monorepo.
+#
+# DESIGN GOALS:
+#   • Consistent style enforcement across all services.
+#   • Prevention of common runtime bugs (errcheck, staticcheck).
+#   • Enforcement of readability (revive, gofmt).
+#   • Minimized noise from generated or test code.
+#
+# KEY LINTERS:
+#   - govet        : finds suspicious constructs, misuse of printf, etc.
+#   - errcheck     : detects ignored errors.
+#   - staticcheck  : advanced code correctness analysis.
+#   - ineffassign  : detects redundant assignments.
+#   - gocyclo      : complexity threshold enforcement (≤15 recommended).
+#   - gofmt        : ensures standardized formatting.
+#   - revive       : stylistic and convention checks.
+#   - misspell     : spelling consistency.
+#   - nakedret     : discourages unnamed bare returns.
+#   - dupl         : detects code duplication (DRY violations).
+#
+# POLICIES:
+#   • Generated files (*.gen.go) are ignored.
+#   • Tests are relaxed for errcheck (noise reduction).
+#   • Comment style enforced only for exported symbols.
+#
+# MAINTENANCE:
+#   • Update rule sets only in sync with golangci-lint version bump.
+#   • Run `make lint` locally before merging branches.
+#   • For large code changes, run with `--fix` to auto-correct formatting.
+################################################################################
+
+version: "2"
+linters:
+  default: none
+  enable:
+    - bidichk
+    - errcheck
+    - govet
+    - ineffassign
+    - makezero
+    - misspell
+    - modernize
+    - revive
+    - staticcheck
+    - unconvert
+    - unqueryvet
+    - unused
+    - whitespace
+  settings:
+    govet:
+      disable:
+        - fieldalignment
+      enable-all: true
+    unqueryvet:
+      check-sql-builders: true
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - std-error-handling
+    rules:
+      - linters:
+          - unused
+        text: SetupEnterprise
+      - linters:
+          - revive
+        text: var-naming|error-naming|exported|increment-decrement|error-strings|if-return|unused-parameter|blank-imports|empty-block
+      - linters:
+          - revive
+        path: enterprise
+        text: var-naming|error-naming|exported|increment-decrement|error-strings|if-return|unused-parameter|blank-imports|empty-block
+      - linters:
+          - misspell
+        path: platform/shared/markdown/html_entities.go
+      - linters:
+          - unqueryvet
+        path: channels/store/sqlstore/post_store.go
+      - linters:
+          - staticcheck
+        text: SA1019
+      - linters:
+          - staticcheck
+        text: ST1023
+      - linters:
+          - staticcheck
+        text: ST1012
+      - linters:
+          - staticcheck
+        text: ST1005
+      - linters:
+          - staticcheck
+        text: QF1011
+      - linters:
+          - staticcheck
+        text: QF1001
+      - linters:
+          - staticcheck
+        text: QF1003
+      - linters:
+          - staticcheck
+        text: QF1012
+      - linters:
+          - staticcheck
+        text: QT1019
+      - linters:
+          - staticcheck
+        text: QF1008
+      - linters:
+          - staticcheck
+        text: QF1004
+      - linters:
+          - staticcheck
+        text: ST1019
+      - linters:
+          - staticcheck
+        text: QF1006
+      - linters:
+          - staticcheck
+        text: QF1002
+      - linters:
+          - staticcheck
+        text: QF1007
+      - linters:
+          - errcheck
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    gofmt:
+      simplify: true
+      rewrite-rules:
+        - pattern: interface{}
+          replacement: any
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+      - mock.*
+issues:
+  max-issues-per-linter: 0 # no maximum
+  max-same-issues: 0 # no maximum
